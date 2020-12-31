@@ -93,9 +93,11 @@ model = ResNet50()
 earlystopping = EarlyStopping(patience=4)
 
 # define the model checkpoint to store only the best weights
-checkpoint_path = "training_1/cp.ckpt"
+checkpoint_path = "Training1 Saved Weights"
 checkpoint_dir = os.path.dirname(checkpoint_path)
-checkpoint = ModelCheckpoint(filepath=checkpoint_path, save_best_only=True)
+filename = os.path.join(checkpoint_path, 'ResNet{epoch:02d}.h5')
+checkpoint = ModelCheckpoint(filepath=filename, save_best_only=True)
 
 # Train the model and validate it on validation dataset for saving weights
-model.fit(TrainData, epochs=20, validation_data=ValData, callbacks=[earlystopping, checkpoint])
+model.fit(TrainData, batch_size=10, epochs=20, validation_data=ValData, callbacks=[earlystopping, checkpoint])
+model.save(os.path.join(checkpoint_path, 'saved_model.h5'))
